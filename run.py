@@ -1,4 +1,7 @@
 import imp
+from os import remove
+
+from keyring import delete_password
 from user import User
 from credentials import Credentials
 
@@ -74,3 +77,123 @@ def display_passwords():
     Function to display all passwords stored
     '''
     return Credentials.display_passwords()
+
+def main():
+    print("Welcome to Password locker") 
+    print('*' *20) 
+    print('*' *20)  
+
+    print("What would you like to do? ")
+    while True:
+
+        print("Use this short codes:lg-Login\n cu- Create user\n du- display users \n fu- find user \n ex-exit ") 
+        short_code = input().lower()
+
+        if short_code == 'lg':
+            username = input("Enter username: ")
+            password = input("Enter password: ")
+            user = find_user(username)
+
+            if user.user_name == username and user.password == password:
+                print("Logged in ")
+
+                while True:
+                    print(f"Welcome {username}, use the following short codes to select the values ")
+                    print("sp- Save new password \n delp- Delete password \n disp- Display saved passwords \n lo- Log out")
+
+                    picked_choice = input().lower()
+
+                    if picked_choice == 'sp':
+                        print("New account")
+                        print("-" *20)
+                        
+                        account = input("Account name: ")
+                        password = input("Password: ")
+
+                        save_password(create_password(account, password))
+
+                    elif picked_choice == 'delp':
+                        account = input("Enter the name of the account you want to delete:  ") 
+                        if check_existing_password(account):
+                            remove_account = (account)
+                            delete_password(remove_account) 
+                        else:
+                            print(f"{account} Does not exist")  
+
+                    elif picked_choice == 'disp':
+                        if display_passwords():
+                            for acc in display_passwords():
+                                print(f"Account: {acc.account} : password:{acc.password} \n")
+
+                            else:
+                                print('No password saved yet \n')  
+                    elif picked_choice == 'lo':
+                        print('Bye') 
+                        break
+                    else:
+                        print("Wrong credentials")                           
+
+        elif short_code == 'cu':
+            print("New account")
+            print('*'*20)
+
+            f_name = input("First name: ")
+            l_name = input("Last name : ")
+            username = input("Username: ")
+            password = input("Password: ")
+
+            save_user(create_user(f_name, l_name, username, password))
+            print('\n')
+            print(f"New user {f_name} {l_name} created")
+
+            while True:
+                print(f"Welcome {username}, Use the following short codes to select their corresponding values. sp- Save new password \n delp - Delete password \n disp- Display saved passwords \n lo- Log out")
+                choice = input().lower()
+                if choice == 'sp':
+                    print("New account")
+                    print('*' *20)
+
+                    account = input("Account: ")
+                    password = input ("Password: ")
+
+                elif choice == 'delp':
+                    account = input("Enter the name of the account you want to delete:  ") 
+                    if check_existing_password(account):
+                        remove_account = (account)
+                        delete_password(remove_account) 
+                    else:
+                        print(f"{account} Does not exist")
+
+                elif choice == 'disp':
+                    if display_passwords():
+                        for acc in display_passwords():
+                            print(f"Account: {acc.account} : password:{acc.password} \n")
+
+                        else:
+                            print('No password saved yet \n')
+                elif choice == 'lo':
+                    break   
+
+        elif short_code == 'du':
+            if display_users():
+                print("Here is a list of all your users \n ") 
+
+                for user in display_users():
+                    print(f"{user.first_name} {user.last_name}  {user.user_name} {user.password} \n ")
+            else:
+                print("You don't have an user saved yet \n") 
+
+        elif short_code == 'fu':
+            search_username = input("Enter the username you want to search for")   
+            if check_existing_users(search_username):
+                search_username = find_user(search_username)
+                print(f"{search_username.first_name} {search_username.last_name}") 
+
+            else:
+                print("That user doesn't exist") 
+
+        elif short_code == 'ex':
+            print("Au revoir")
+            break
+        else:
+            print("I really didn't get that. Please use short codes")
