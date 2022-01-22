@@ -1,3 +1,4 @@
+from select import select
 import unittest
 from credentials import Credentials
  
@@ -34,5 +35,24 @@ class TestCredentials(unittest.TestCase):
         self.new_credential.save_password()
         self.assertEqual(len(Credentials.passwords),1)
 
+    def test_save_multiple_passwords(self):
+        '''
+        test_save_multiple_passwords to check if we can save multiple credentials objects into passwords list.
+        '''  
+        self.new_credential.save_password()
+        test_password = Credentials("Twitter", "5678")  
+        test_password.save_password()
+        self.assertEqual(len(Credentials.passwords),2)
+    
+    def test_delete_password(self):
+        '''
+        test_delete_password to test if we can remove a password
+        ''' 
+        self.new_credential.save_password()
+        test_password = Credentials("ruuuuu", "2345")
+        test_password.save_password()
+
+        self.new_credential.delete_password()
+        self.assertEqual(len(Credentials.passwords),1)
 if __name__ == '__main__':
     unittest.main() 
