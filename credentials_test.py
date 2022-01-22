@@ -54,5 +54,34 @@ class TestCredentials(unittest.TestCase):
 
         self.new_credential.delete_password()
         self.assertEqual(len(Credentials.passwords),1)
+
+    def test_find_password_by_account(self):
+        '''
+        test to check if we can find a password bt the account and display the password
+        '''
+        self.new_credential.save_password()
+        test_password = Credentials("Liyo", "6677")
+        test_password.save_password()
+
+        found_password = Credentials.find_by_account("Liyo")
+        self.assertEqual(found_password.passwords, test_password.passwords)
+
+    def test_password_exist(self):
+        '''
+        Test to return a boolean incase we cannot find the password
+        ''' 
+        self.new_credential.save_password()
+        test_user = Credentials("Facebook", "vbnm") 
+        test_user.save_password()
+        
+        password_exists = Credentials.password_exist("Facebook")
+        self.assertTrue(password_exists) 
+
+    def  test_display_all_passwords(self):
+        '''
+        Test to return a list of all passwords stored     
+        '''
+        self.assertEqual(Credentials.display_passwords(), Credentials.passwords)   
+
 if __name__ == '__main__':
     unittest.main() 
