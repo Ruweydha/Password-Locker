@@ -1,9 +1,9 @@
 import unittest #importing the Unit test
 from user import User
 
-class TestContact(unittest.TestCase):
+class TestUser(unittest.TestCase):
     '''
-    Test class that defines test cases for the contact class behaviours.
+    Test class that defines test cases for the user class behaviours.
 
     Args:
       unittest.TestCase: TestCase class that helps in creating test cases
@@ -36,7 +36,7 @@ class TestContact(unittest.TestCase):
         self.new_user.save_user()
         self.assertEqual(len(User.users),1)
 
-    def test_save_multiple_user(self):
+    def test_save_multiple_users(self):
         '''
         test_save_multiple_user to check if we can save multiple user objects in our users list
         ''' 
